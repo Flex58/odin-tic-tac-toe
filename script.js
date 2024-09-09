@@ -68,6 +68,8 @@ function gameController(playerOneName = "Player1",
         }
     ];
 
+    let gameTurn = 0
+
     const board = gameBoard();
 
     let activePlayer = players[0]
@@ -141,7 +143,12 @@ function gameController(playerOneName = "Player1",
         
 
         if (round) {
+            gameTurn++;
             if (checkWin(row, column, getActivePlayer().token)) return
+            if (gameTurn == 9) {
+                console.log("It's a draw")
+                return
+            }
             switchPlayer();
             printNewRound();
         }
