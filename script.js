@@ -14,7 +14,7 @@ function cell() {
     };
 }
 
-function gameBoard() {
+const gameBoard = (() => {
     const rows = 3;
     const columns = 3;
     const board = [];
@@ -52,10 +52,11 @@ function gameBoard() {
         getBoard,
         placeToken
     };
-}
+})();
 
-function gameController(playerOneName = "Player1", 
-                        playerTwoName = "Player2") {
+const gameController = 
+     ((playerOneName = "Player1", 
+       playerTwoName = "Player2") => {
     
     const players = [
         {
@@ -70,7 +71,7 @@ function gameController(playerOneName = "Player1",
 
     let gameTurn = 0
 
-    const board = gameBoard();
+    const board = gameBoard;
 
     let activePlayer = players[0]
 
@@ -107,6 +108,7 @@ function gameController(playerOneName = "Player1",
                 console.log(`${getActivePlayer().name} wins!`)
                 return true;
             }
+        }
         //check diagonals
             if (row === column) {
                 for (let i = 0; i < n; i++) {
@@ -131,17 +133,14 @@ function gameController(playerOneName = "Player1",
                     }
                 }
             }
-        }
     }
+    
 
     const playRound = (row, column) => {
         
         console.log(`Placing token at ${row} ${column}`)
         let round = board.placeToken(row, column, getActivePlayer().token);
-
-
         
-
         if (round) {
             gameTurn++;
             if (checkWin(row, column, getActivePlayer().token)) return
@@ -160,6 +159,4 @@ function gameController(playerOneName = "Player1",
         playRound,
         getActivePlayer
     }
-}
-
-const game = gameController();
+})();
