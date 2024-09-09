@@ -37,16 +37,12 @@ function gameBoard() {
     }
 
     const placeToken = (row, column, player) => {
-        do {
-            if (board[row][column].getValue() === "-") {
-                board[row][column].addToken(player);
-            }
-            else {
-                console.log("Invalid position, try again")
-                placeToken(prompt("row"), prompt("column: "), player)
-            }
+        if (board[row][column].getValue() === "-") {
+            board[row][column].addToken(player);
         }
-        while (board[row][column] === "-")
+        else {
+            console.log("Invalid position, try again")
+        }
     }
 
     return {
@@ -55,13 +51,3 @@ function gameBoard() {
         placeToken
     };
 }
-
-test = gameBoard()
-best = cell()
-
-
-test.printBoard();
-test.placeToken(prompt("row"), prompt("column: "), "X")
-test.printBoard();
-test.placeToken(prompt("row"), prompt("column: "), "O")
-test.printBoard();
