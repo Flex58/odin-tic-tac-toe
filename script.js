@@ -54,9 +54,10 @@ const gameBoard = (() => {
     };
 })();
 
-const gameController = 
-     ((playerOneName = "Player1", 
-       playerTwoName = "Player2") => {
+const gameController = ((playerOneName, playerTwoName) => {
+    let gameTurn = 0
+    
+    const board = gameBoard;
     
     const players = [
         {
@@ -69,9 +70,7 @@ const gameController =
         }
     ];
 
-    let gameTurn = 0
-    
-    const board = gameBoard;
+    const setPlayerName = (name, i) => players[i].name = name
 
     let activePlayer = players[0]
 
@@ -155,8 +154,9 @@ const gameController =
         playRound,
         getActivePlayer,
         checkWin,
+        setPlayerName
     }
-})();
+})("Player1", "Player2");
 
 
 const displayController = (() => {
