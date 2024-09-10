@@ -70,7 +70,7 @@ const gameController =
     ];
 
     let gameTurn = 0
-
+    
     const board = gameBoard;
 
     let activePlayer = players[0]
@@ -94,9 +94,7 @@ const gameController =
             if (playBoard[row][i].getValue() != token) break;
             
             if (i == n - 1) {
-                board.printBoard();
-                console.log(`${getActivePlayer().name} wins!`)
-                return true;
+                return "win";
             }
         }
         //check verticals
@@ -104,9 +102,7 @@ const gameController =
             if (playBoard[i][column].getValue() != token) break;
             
             if (i == n - 1) {
-                board.printBoard();
-                console.log(`${getActivePlayer().name} wins!`)
-                return true;
+                return "win";
             }
         }
         //check diagonals
@@ -115,9 +111,7 @@ const gameController =
                     if (playBoard[i][i].getValue() != token) break;
 
                     if (i == n - 1) {
-                        board.printBoard();
-                        console.log(`${getActivePlayer().name} wins!`)
-                        return true;
+                        return "win";
                     }
                 }
             }
@@ -127,11 +121,13 @@ const gameController =
                     if (playBoard[i][n - 1 - i].getValue() != token) break;
 
                     if (i == n - 1) {
-                        board.printBoard();
-                        console.log(`${getActivePlayer().name} wins!`)
-                        return true;
+                        return "win";
                     }
                 }
+            }
+
+            if (gameTurn == 9) {
+                return "draw";
             }
     }
     
@@ -143,21 +139,22 @@ const gameController =
         
         if (round) {
             gameTurn++;
-            if (checkWin(row, column, getActivePlayer().token)) return
-            if (gameTurn == 9) {
-                console.log("It's a draw")
-                return
-            }
+            let winStatus = checkWin(row, column, getActivePlayer().token);
+            if (winStatus == "win") return board.printBoard(), console.log(`${getActivePlayer().name} ${winStatus}s!`)
+            
+            if (winStatus == "draw") return board.printBoard(), console.log(`${winStatus}!`)
+    
             switchPlayer();
             printNewRound();
         }
     }
-
+    
     printNewRound();
 
     return {
         playRound,
-        getActivePlayer
+        getActivePlayer,
+        checkWin,
     }
 })();
 
@@ -198,9 +195,14 @@ const displayController = (() => {
 
         game.playRound(row, column);
         updateScreen();
+        let winStatus = game.checkWin(row, column, activePlayer.token)
+        if (winStatus == "win") {
+            turnDiv.textContent = `${game.getActivePlayer().name} ${winStatus}s!`;
+        }
+        else if (winStatus == "draw") {
+            turnDiv.textContent = `${winStatus}!`;
+        }
     })  
-
-    
 
     updateScreen();
 
