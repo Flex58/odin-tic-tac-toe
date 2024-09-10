@@ -164,6 +164,7 @@ const displayController = (() => {
     const game = gameController;
     const boardDiv = document.querySelector(".board");
     const turnDiv = document.querySelector(".turn");
+    let gameOver = false;
 
     const updateScreen = () => {
         boardDiv.textContent = "";
@@ -190,18 +191,17 @@ const displayController = (() => {
     boardDiv.addEventListener("click", (e) => { 
         let row = e.target.dataset.row;
         let column = e.target.dataset.column;
-
+        
+        if (gameOver) return;
         if (!row || !column) return;
 
         game.playRound(row, column);
         updateScreen();
         let winStatus = game.checkWin(row, column, activePlayer.token)
-        if (winStatus == "win") {
-            turnDiv.textContent = `${game.getActivePlayer().name} ${winStatus}s!`;
-        }
-        else if (winStatus == "draw") {
-            turnDiv.textContent = `${winStatus}!`;
-        }
+        if (winStatus == "win") return gameOver = true, turnDiv.textContent = `${game.getActivePlayer().name} ${winStatus}s!`;
+        
+        else if (winStatus == "draw") return gameOver = true, turnDiv.textContent = `${winStatus}!`;
+        
     })  
 
     updateScreen();
