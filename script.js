@@ -160,3 +160,48 @@ const gameController =
         getActivePlayer
     }
 })();
+
+
+const displayController = (() => {
+
+    const game = gameController;
+    const boardDiv = document.querySelector(".board");
+    const turnDiv = document.querySelector(".turn");
+
+    const updateScreen = () => {
+        boardDiv.textContent = "";
+
+        board = gameBoard.getBoard();
+
+        activePlayer = game.getActivePlayer();
+
+        turnDiv.textContent = `It's ${activePlayer.name}'s turn!`
+
+        board.forEach((row, rowIndex) => {
+            row.forEach((cell, columnIndex) => {
+               const btn = document.createElement("button");
+               btn.classList.add("cell")
+               btn.textContent = cell.getValue();
+               btn.dataset.column = columnIndex;
+               btn.dataset.row = rowIndex;
+
+               boardDiv.appendChild(btn);
+            }) 
+        });
+    }
+    
+    boardDiv.addEventListener("click", (e) => { 
+        let row = e.target.dataset.row;
+        let column = e.target.dataset.column;
+
+        if (!row || !column) return;
+
+        game.playRound(row, column);
+        updateScreen();
+    })  
+
+    
+
+    updateScreen();
+
+})();
