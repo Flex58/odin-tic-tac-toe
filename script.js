@@ -1,5 +1,12 @@
+//TODO: 
+//      - CHANGE GAMEOVER TO BE CONTROLLED BY GAMECONTROLLER
+//      - LET PLAYERS CHANGE NAME BY FORM
+//      - STYLE
+//      - NEW GAME AND RESTART BUTTON
+
+
 function cell() {
-    let value = "-";
+    let value = "";
 
     const addToken = (player) => {
         value = player;
@@ -37,7 +44,7 @@ const gameBoard = (() => {
     }
 
     const placeToken = (row, column, player) => {
-        if (board[row][column].getValue() === "-") {
+        if (board[row][column].getValue() === "") {
             board[row][column].addToken(player);
             return true;
         }
@@ -56,7 +63,8 @@ const gameBoard = (() => {
 
 const gameController = ((playerOneName, playerTwoName) => {
     let gameTurn = 0
-    
+    let gameOver = false;
+
     const board = gameBoard;
     
     const players = [
@@ -88,7 +96,7 @@ const gameController = ((playerOneName, playerTwoName) => {
     const checkWin = (row, column, token) => {
         let n = 3; // n = board size
         const playBoard = board.getBoard();
-        //check horizontals
+        //check horizontal
         for (let i = 0; i < n; i++) {
             if (playBoard[row][i].getValue() != token) break;
             
@@ -96,7 +104,7 @@ const gameController = ((playerOneName, playerTwoName) => {
                 return "win";
             }
         }
-        //check verticals
+        //check vertical
         for (let i = 0; i < n; i++) {
             if (playBoard[i][column].getValue() != token) break;
             
@@ -134,17 +142,20 @@ const gameController = ((playerOneName, playerTwoName) => {
     const playRound = (row, column) => {
         
         console.log(`Placing token at ${row} ${column}`)
+        if (gameOver) return;
+        
         let round = board.placeToken(row, column, getActivePlayer().token);
         
         if (round) {
             gameTurn++;
             let winStatus = checkWin(row, column, getActivePlayer().token);
-            if (winStatus == "win") return board.printBoard(), console.log(`${getActivePlayer().name} ${winStatus}s!`)
+            if (winStatus == "win") return board.printBoard(), console.log(`${getActivePlayer().name} ${winStatus}s!`), gameOver = true
             
-            if (winStatus == "draw") return board.printBoard(), console.log(`${winStatus}!`)
+            if (winStatus == "draw") return board.printBoard(), console.log(`${winStatus}!`), gameOver = true
     
             switchPlayer();
             printNewRound();
+            return true;
         }
     }
     
@@ -164,7 +175,6 @@ const displayController = (() => {
     const game = gameController;
     const boardDiv = document.querySelector(".board");
     const turnDiv = document.querySelector(".turn");
-    let gameOver = false;
 
     const updateScreen = () => {
         boardDiv.textContent = "";
@@ -192,16 +202,16 @@ const displayController = (() => {
         let row = e.target.dataset.row;
         let column = e.target.dataset.column;
         
-        if (gameOver) return;
+        
         if (!row || !column) return;
 
-        game.playRound(row, column);
-        updateScreen();
-        let winStatus = game.checkWin(row, column, activePlayer.token)
-        if (winStatus == "win") return gameOver = true, turnDiv.textContent = `${game.getActivePlayer().name} ${winStatus}s!`;
-        
-        else if (winStatus == "draw") return gameOver = true, turnDiv.textContent = `${winStatus}!`;
-        
+        if (game.playRound(row, column)){
+            updateScreen();
+            let winStatus = game.checkWin(row, column, activePlayer.token)
+            if (winStatus == "win") return turnDiv.textContent = `${game.getActivePlayer().name} ${winStatus}s!`;
+            
+            else if (winStatus == "draw") return turnDiv.textContent = `${winStatus}!`;
+        }
     })  
 
     updateScreen();
