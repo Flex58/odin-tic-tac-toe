@@ -62,6 +62,7 @@ const gameBoard = (() => {
 })();
 
 const gameController = ((playerOneName, playerTwoName) => {
+    let gameStart = false;
     let gameTurn = 0
     let gameOver = false;
 
@@ -141,9 +142,9 @@ const gameController = ((playerOneName, playerTwoName) => {
 
     const playRound = (row, column) => {
         
-        console.log(`Placing token at ${row} ${column}`)
+        if (!gameStart) return;
         if (gameOver) return;
-        
+        console.log(`Placing token at ${row} ${column}`)
         let round = board.placeToken(row, column, getActivePlayer().token);
         
         if (round) {
@@ -159,13 +160,19 @@ const gameController = ((playerOneName, playerTwoName) => {
         }
     }
     
-    printNewRound();
+    const startGame = () => {
+        
+        gameStart = true;
+        printNewRound();
+        
+    }
 
     return {
         playRound,
         getActivePlayer,
         checkWin,
-        setPlayerName
+        setPlayerName,
+        startGame
     }
 })("Player1", "Player2");
 
@@ -175,6 +182,7 @@ const displayController = (() => {
     const game = gameController;
     const boardDiv = document.querySelector(".board");
     const turnDiv = document.querySelector(".turn");
+    const startBtn = document.querySelector(".start")
 
     const updateScreen = () => {
         boardDiv.textContent = "";
@@ -214,6 +222,11 @@ const displayController = (() => {
         }
     })  
 
-    updateScreen();
+    startBtn.addEventListener("click", () => {
+        game.startGame();
+        updateScreen();
+        startBtn.remove();
+    })
+    
 
 })();
