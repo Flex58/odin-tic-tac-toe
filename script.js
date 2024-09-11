@@ -1,8 +1,6 @@
 //TODO: 
-//      - CHANGE GAMEOVER TO BE CONTROLLED BY GAMECONTROLLER
 //      - LET PLAYERS CHANGE NAME BY FORM
 //      - STYLE
-//      - NEW GAME AND RESTART BUTTON
 
 
 function cell() {
@@ -124,7 +122,7 @@ const gameController = ((playerOneName, playerTwoName) => {
                 }
             }
 
-            if (row + column === n - 1) {
+            if (Number(row) + Number(column) == (n - 1)) {
                 for (let i = 0; i < n; i++) {
                     if (playBoard[i][n - 1 - i].getValue() != token) break;
 
@@ -167,12 +165,26 @@ const gameController = ((playerOneName, playerTwoName) => {
         
     }
 
+    const restartGame = () => {
+        const playBoard = board.getBoard();
+        playBoard.forEach(row => {
+            row.forEach(column => {
+                column.addToken("")
+            })
+        })
+        activePlayer = players[0]
+        printNewRound();
+        gameOver = false;
+        gameTurn = 0;
+    }
+
     return {
         playRound,
         getActivePlayer,
         checkWin,
         setPlayerName,
-        startGame
+        startGame,
+        restartGame
     }
 })("Player1", "Player2");
 
@@ -183,6 +195,9 @@ const displayController = (() => {
     const boardDiv = document.querySelector(".board");
     const turnDiv = document.querySelector(".turn");
     const startBtn = document.querySelector(".start")
+    const restartBtn = document.createElement("button")
+    const containerDiv = document.querySelector(".container")
+    restartBtn.classList.add("restart")
 
     const updateScreen = () => {
         boardDiv.textContent = "";
@@ -207,8 +222,8 @@ const displayController = (() => {
     }
     
     boardDiv.addEventListener("click", (e) => { 
-        let row = e.target.dataset.row;
-        let column = e.target.dataset.column;
+        const row = e.target.dataset.row;
+        const column = e.target.dataset.column;
         
         
         if (!row || !column) return;
@@ -216,9 +231,15 @@ const displayController = (() => {
         if (game.playRound(row, column)){
             updateScreen();
             let winStatus = game.checkWin(row, column, activePlayer.token)
-            if (winStatus == "win") return turnDiv.textContent = `${game.getActivePlayer().name} ${winStatus}s!`;
+            if (winStatus == "win") {
+                turnDiv.textContent = `${game.getActivePlayer().name} ${winStatus}s!`;
+                containerDiv.appendChild(restartBtn)
+            }
             
-            else if (winStatus == "draw") return turnDiv.textContent = `${winStatus}!`;
+            else if (winStatus == "draw") {
+                turnDiv.textContent = `${winStatus}!`;
+                containerDiv.appendChild(restartBtn)
+            }
         }
     })  
 
@@ -227,6 +248,11 @@ const displayController = (() => {
         updateScreen();
         startBtn.remove();
     })
-    
+
+    restartBtn.addEventListener("click", () => {
+        game.restartGame()
+        updateScreen()
+        restartBtn.remove()
+    })
 
 })();
