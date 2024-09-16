@@ -197,7 +197,9 @@ const displayController = (() => {
     const startBtn = document.querySelector(".start")
     const restartBtn = document.createElement("button")
     const containerDiv = document.querySelector(".container")
+    const changeNameForm = document.querySelector("#change-name")
     restartBtn.classList.add("restart")
+    let startGame;
 
     const updateScreen = () => {
         boardDiv.textContent = "";
@@ -245,6 +247,7 @@ const displayController = (() => {
 
     startBtn.addEventListener("click", () => {
         game.startGame();
+        startGame = true;
         updateScreen();
         startBtn.remove();
     })
@@ -253,6 +256,22 @@ const displayController = (() => {
         game.restartGame()
         updateScreen()
         restartBtn.remove()
+    })
+    
+    changeNameForm.addEventListener("submit", (e) => {
+        if (document.querySelector("#p1").value) {
+            game.setPlayerName(document.querySelector("#p1").value, 0)
+        }
+
+        if (document.querySelector("#p2").value) {
+            game.setPlayerName(document.querySelector("#p2").value, 1)
+        }
+
+        if (startGame) {
+            updateScreen();
+        }
+
+        e.preventDefault();
     })
 
 })();
