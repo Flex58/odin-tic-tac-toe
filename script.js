@@ -199,6 +199,7 @@ const displayController = (() => {
     const containerDiv = document.querySelector(".container")
     const changeNameForm = document.querySelector("#change-name")
     restartBtn.classList.add("restart")
+    restartBtn.textContent = "Restart"
     let startGame;
 
     const updateScreen = () => {

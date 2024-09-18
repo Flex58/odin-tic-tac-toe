@@ -24,10 +24,31 @@ body {
     display: grid;
     grid-template-rows: 1fr, 1fr, 1fr;
     gap: 1rem;
-    margin-bottom: 5rem;
+    margin-bottom: 3rem;
     padding: 2rem;
-    border-radius: 5%;
+    border-radius: 10px;
     border: 1px solid #9fd3c7;
+}
+
+#change-name button {
+    border-radius: 5px;
+    border: 2px solid #142D4C;
+    background-color: #385170;
+    font-family: var(--family);
+    color: #ececec;
+}
+
+input {
+    font-family: var(--family);
+    border-radius: 5px;
+    border: 1px solid #142D4C;
+    background-color: #142D4C;
+    color: #ececec;
+}
+
+#change-name button:hover {
+    cursor: pointer;
+    box-shadow: inset 0px 0px 10px 2px #142D4C;
 }
 
 .start {
@@ -49,5 +70,61 @@ body {
 
 .start:hover {
     cursor: pointer;
-    box-shadow: inset 0px 0px 23px 0px #142D4C;;
+    box-shadow: inset 0px 0px 23px 4px #142D4C;
+}
+
+.turn {
+    padding-bottom: 3rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.cell {
+    background-color: #142D4C;
+    border: 1px solid #9fd3c7;
+    color: #9fd3c7;
+    font-size: 4rem;
+    font-weight: bold;
+}
+
+.cell:hover {
+    cursor: pointer;
+    box-shadow: inset 0px 0px 5px 2px #385170;
+}
+
+.cell:nth-last-child(n + 7) {
+    border-top: none;
+}
+
+.cell:nth-child(n + 7) {
+    border-bottom: none;
+}
+
+.cell:nth-child(1),
+.cell:nth-child(4),
+.cell:nth-child(7) {
+    border-left: none
+}
+
+.cell:nth-child(3),
+.cell:nth-child(6),
+.cell:nth-child(9) {
+    border-right: none
+}
+
+.restart {
+    margin-top: 2rem;
+    padding: 0rem 7rem;
+    font-family: var(--family);
+    font-size: 1.5rem;
+    font-weight: 600;
+    background-color: #385170;
+    border: 1px solid #9fd3c7;
+    border-radius: 5px;
+    color: #ececec;
+}
+
+.restart:hover {
+    cursor: pointer;
+    box-shadow: inset 0px 0px 20px 5px #142D4C;
 }
