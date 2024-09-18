@@ -234,11 +234,13 @@ const displayController = (() => {
             updateScreen();
             let winStatus = game.checkWin(row, column, activePlayer.token)
             if (winStatus == "win") {
+                startGame = false
                 turnDiv.textContent = `${game.getActivePlayer().name} ${winStatus}s!`;
                 containerDiv.appendChild(restartBtn)
             }
             
             else if (winStatus == "draw") {
+                startGame = false
                 turnDiv.textContent = `${winStatus}!`;
                 containerDiv.appendChild(restartBtn)
             }
@@ -253,6 +255,7 @@ const displayController = (() => {
     })
 
     restartBtn.addEventListener("click", () => {
+        startGame = true;
         game.restartGame()
         updateScreen()
         restartBtn.remove()
